@@ -15,5 +15,6 @@ dependencies:
   - tqdm
   - urllib3
   - pytorch=1.0.0
+  - jupyter
   - pip:
     - torch==1.0.0

@@ -182,6 +182,61 @@ class BiDAFAttention(nn.Module):
 
         return s
 
+class Coattention(nn.Module):
+    """Dynamic Coattention Networks.
+
+    Coattention computes attention in two directions and involves a second-level
+    attention computation (attending over representations that are themselves
+    attention outputs:
+    The first level attention is the C2Q attention which gets concatenated with
+    the second-level attention outputs. This is then fed through a bidirectional
+    LSTM.
+
+    TODO: change output shape
+    The output has shape (batch_size, context_len, 2 * hidden_size).
+
+    Args:
+        hidden_size (int): Size of hidden activations.
+        drop_prob (float): Probability of zero-ing out activations.
+    """
+    def __init__(self, hidden_size, drop_prob=0.1):
+        super(Coattention, self).__init__()
+        self.drop_prob = drop_prob
+        self.hidden_size = hidden_size
+        self.encoder = RNNEncoder(input_size=6*hidden_size,
+                                     hidden_size=hidden_size,
+                                     num_layers=1,
+                                     drop_prob=drop_prob)
+        self.q_linear = nn.Linear(hidden_size, hidden_size)
+        self.dropout = nn.Dropout(p=drop_prob)
+
+    # TODO: rename the variables and look through
+    # test code does it work? locally
+    def forward(self, c, q, c_mask, q_mask):
+
+        # q encoding projection
+        Qprime = torch.tanh(self.q_linear(q.view(-1, self.hidden_size))).view(q.size()) #B x n + 1 x l
+
+        # co attention
+        C_t = torch.transpose(c, 1, 2) #B x l x m + 1
+        L = torch.bmm(Qprime, C_t) # L = B x n + 1 x m + 1
+
+        A_Q_ = F.softmax(L, dim=1) # B x n + 1 x m + 1
+        A_Q = torch.transpose(A_Q_, 1, 2) # B x m + 1 x n + 1
+        C_Q = torch.bmm(C_t, A_Q) # (B x l x m + 1) x (B x m x n + 1) => B x l x n + 1
+
+        A_C = F.softmax(L, dim=2)  # B x n + 1 x m + 1
+        Q_t = torch.transpose(Qprime, 1, 2)  # B x l x n + 1
+        C_C = torch.bmm(torch.cat((Q_t, C_Q), 1), A_C) # (B x l x n+1 ; B x l x n+1) x (B x n +1x m+1) => B x 2l x m + 1
+
+        C_C_t = torch.transpose(C_C, 1, 2)  # B x m + 1 x 2l
+
+        # BiLSTM
+        bilstm_in = torch.cat((C_C_t, c), 2) # B x m + 1 x 3l
+        bilstm_in = self.dropout(bilstm_in)
+        #?? should it be d_lens + 1 and get U[:-1]
+        U = self.encoder(bilstm_in, c_mask.sum(-1)) #B x m x 2l
+        return U
 
 class BiDAFOutput(nn.Module):
     """Output layer used by BiDAF for question answering.
@@ -207,6 +262,46 @@ class BiDAFOutput(nn.Module):
                               drop_prob=drop_prob)
 
         self.att_linear_2 = nn.Linear(8 * hidden_size, 1)
+        self.mod_linear_2 = nn.Linear(2 * hidden_size, 1)
+
+    def forward(self, att, mod, mask):
+        # Shapes: (batch_size, seq_len, 1)
+        logits_1 = self.att_linear_1(att) + self.mod_linear_1(mod)
+        mod_2 = self.rnn(mod, mask.sum(-1))
+        logits_2 = self.att_linear_2(att) + self.mod_linear_2(mod_2)
+
+        # Shapes: (batch_size, seq_len)
+        log_p1 = masked_softmax(logits_1.squeeze(), mask, log_softmax=True)
+        log_p2 = masked_softmax(logits_2.squeeze(), mask, log_softmax=True)
+
+        return log_p1, log_p2
+
+class BiDAFCoattentionOutput(nn.Module):
+    """Output layer used by BiDAF for question answering.
+    This is used for BiDAF Coattention model since the ouput from attention
+    layer is different for baseline attention layer.
+
+    Computes a linear transformation of the attention and modeling
+    outputs, then takes the softmax of the result to get the start pointer.
+    A bidirectional LSTM is then applied the modeling output to produce `mod_2`.
+    A second linear+softmax of the attention output and `mod_2` is used
+    to get the end pointer.
+
+    Args:
+        hidden_size (int): Hidden size used in the BiDAF model.
+        drop_prob (float): Probability of zero-ing out activations.
+    """
+    def __init__(self, hidden_size, drop_prob):
+        super(BiDAFCoattentionOutput, self).__init__()
+        self.att_linear_1 = nn.Linear(2 * hidden_size, 1)
+        self.mod_linear_1 = nn.Linear(2 * hidden_size, 1)
+
+        self.rnn = RNNEncoder(input_size=2 * hidden_size,
+                              hidden_size=hidden_size,
+                              num_layers=1,
+                              drop_prob=drop_prob)
+
+        self.att_linear_2 = nn.Linear(2 * hidden_size, 1)
         self.mod_linear_2 = nn.Linear(2 * hidden_size, 1)
 
     def forward(self, att, mod, mask):

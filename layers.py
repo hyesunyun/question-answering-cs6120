@@ -183,7 +183,12 @@ class BiDAFAttention(nn.Module):
         return s
 
 class Coattention(nn.Module):
-    """Dynamic Coattention Networks.
+    """Coattention Layer.
+
+    Based on the paper:
+    "Dynamic Coattention Networks For Question Answering"
+    by Caiming Xiong, Victor Zhong, Richard Socher
+    (https://arxiv.org/abs/1611.01604).
 
     Coattention computes attention in two directions and involves a second-level
     attention computation (attending over representations that are themselves
@@ -192,7 +197,6 @@ class Coattention(nn.Module):
     the second-level attention outputs. This is then fed through a bidirectional
     LSTM.
 
-    TODO: change output shape
     The output has shape (batch_size, context_len, 2 * hidden_size).
 
     Args:

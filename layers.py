@@ -210,8 +210,6 @@ class Coattention(nn.Module):
         self.q_linear = nn.Linear(hidden_size, hidden_size)
         self.dropout = nn.Dropout(p=drop_prob)
 
-    # TODO: rename the variables and look through
-    # test code does it work? locally
     def forward(self, c, q, c_mask, q_mask):
 
         # q encoding projection

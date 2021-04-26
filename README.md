@@ -89,7 +89,7 @@ Make sure you do the following in the BiDAF folder.
 - To train BiDAF Baseline, run `python train.py -n baseline`
 - To train BiDAF model with Character-level Embeddings, run `python train.py -n character`
 - To train BiDAF model with Coattention Layer, run `python train.py -n coattention`
-- To train the combined model, run `python train.py - combined`
+- To train the combined model, run `python train.py -n combined`
 
 ### QANet Model
 

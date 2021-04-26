@@ -1,7 +1,7 @@
 # CS 6120 NLP: Models for Question Answering
 
 The base code was cloned from https://github.com/minggg/squad
-This base code is for Stanford CS 224N Final Project of building a QA system.
+This base code is for [Stanford CS 224N Final Project of building a QA system](http://web.stanford.edu/class/cs224n/project/default-final-project-handout-squad-track.pdf).
 
 We explored the task of models predicting answers to questions correctly
 when given paragraphs and questions about a particular paragraph as input. 

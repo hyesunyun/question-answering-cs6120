@@ -122,7 +122,7 @@ Usage:
 
 where
 - SPLIT is either "dev" or "test"
-- PATH is a path to a checkpoint (e.g., save/train/model-01/best.pth.tar)
+- PATH is a path to a checkpoint (e.g., save/train/model-01/best.pth.tar). Select the path with the best.pth.tar. 
 - NAME is a name to identify the test run.
 
 **NOTE**: `-n` is an alias for `--name` so `-n` can be used as well.

@@ -109,6 +109,42 @@ class EmbeddingWithCharacter(nn.Module):
 
         return emb
 
+class CNN(nn.Module):
+    """Convolutional layer
+    1st stage of computing a word embedding from its char embeddings
+    
+    Remark: process each word in the batch independently
+    """
+    
+    def __init__(self, char_emb_size, f, k=5):
+        """Init CNN
+        
+        Args:
+            'char_emb_size' (int): character Embedding Size (nb of input channels)
+            'f' (int): number of filters (nb of output channels)
+            'k' (int, default=5): kernel (window) size
+        """
+        super(CNN, self).__init__()
+        self.conv1D = nn.Conv1d(char_emb_size, f, k, bias=True)
+     
+    def forward(self, X_reshaped):
+        """Compute the first stage of the word embedding
+        
+        Args:
+            'X_reshaped' (Tensor, shape=(b, char_emb_size, max_word_length)): char-embedded words
+                b = batch of words size
+        
+        Returns:
+            'X_conv_out' (Tensor, shape=(b, f)): output of the convolutional layer
+        """
+        
+        X_conv = self.conv1D(X_reshaped) # (b, f, max_word_length - k +1)
+        
+        # pooling layer to collapse the last dimension
+        X_conv_out, _ = torch.max(F.relu(X_conv), dim=2) # (b, f)
+                
+        return X_conv_out
+
 
 class HighwayEncoder(nn.Module):
     """Encode an input sequence using a highway network.

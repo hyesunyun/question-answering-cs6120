@@ -54,6 +54,40 @@ Coattention Layer is based on the paper:
 by Caiming Xiong, Victor Zhong, Richard Socher
 (https://arxiv.org/abs/1611.01604).
 
+We have also created a model which combines the character-level embeddings and the coattention layer.
+This is the combined model.
+
+### How to use the BiDAF Model code
+
+#### Setup
+
+1. Make sure you have [Miniconda](https://conda.io/docs/user-guide/install/index.html#regular-installation) installed
+    1. Conda is a package manager that sandboxes your project’s dependencies in a virtual environment
+    2. Miniconda contains Conda and its dependencies with no extra packages by default (as opposed to Anaconda, which installs some extra packages)
+
+2. cd into src, run `conda env create -f environment.yml`
+    1. This creates a Conda environment called `squad`
+
+3. Run `conda activate squad`
+    1. This activates the `squad` environment
+    2. Do this each time you want to write/test your code
+  
+4. Run `python setup.py`
+    1. This downloads SQuAD 2.0 training and dev sets, as well as the GloVe 300-dimensional word vectors (840B)
+    2. This also pre-processes the dataset for efficient data loading
+    3. For a MacBook Pro on the Stanford network, `setup.py` takes around 30 minutes total  
+
+5. Browse the code in `train.py`
+    1. The `train.py` script is the entry point for training a model. It reads command-line arguments, loads the SQuAD dataset, and trains a model.
+    2. You may find it helpful to browse the arguments provided by the starter code. Either look directly at the `parser.add_argument` lines in the source code, or run `python train.py -h`.
+
+#### Train
+
+- To train BiDAF Baseline, run `python train.py -n baseline`
+- To train BiDAF model with Character-level Embeddings, run `python train.py -n character`
+- To train BiDAF model with Coattention Layer, run `python train.py -n coattention`
+- To train the combined model, run `python train.py - combined`
+
 ### QANet Model
 
 ### BERT Model

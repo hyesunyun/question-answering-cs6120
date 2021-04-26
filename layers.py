@@ -207,7 +207,11 @@ class Coattention(nn.Module):
         super(Coattention, self).__init__()
         self.drop_prob = drop_prob
         self.hidden_size = hidden_size
-        self.encoder = RNNEncoder(input_size=6*hidden_size,
+        # self.encoder = RNNEncoder(input_size=6*hidden_size,
+        #                              hidden_size=hidden_size,
+        #                              num_layers=1,
+        #                              drop_prob=drop_prob)
+        self.encoder = RNNEncoder(input_size=4*hidden_size,
                                      hidden_size=hidden_size,
                                      num_layers=1,
                                      drop_prob=drop_prob)
@@ -216,28 +220,18 @@ class Coattention(nn.Module):
 
     def forward(self, c, q, c_mask, q_mask):
 
-        # q encoding projection
-        Qprime = torch.tanh(self.q_linear(q.view(-1, self.hidden_size))).view(q.size()) #B x n + 1 x l
-
-        # co attention
-        C_t = torch.transpose(c, 1, 2) #B x l x m + 1
-        L = torch.bmm(Qprime, C_t) # L = B x n + 1 x m + 1
-
-        A_Q_ = F.softmax(L, dim=1) # B x n + 1 x m + 1
-        A_Q = torch.transpose(A_Q_, 1, 2) # B x m + 1 x n + 1
-        C_Q = torch.bmm(C_t, A_Q) # (B x l x m + 1) x (B x m x n + 1) => B x l x n + 1
-
-        A_C = F.softmax(L, dim=2)  # B x n + 1 x m + 1
-        Q_t = torch.transpose(Qprime, 1, 2)  # B x l x n + 1
-        C_C = torch.bmm(torch.cat((Q_t, C_Q), 1), A_C) # (B x l x n+1 ; B x l x n+1) x (B x n +1x m+1) => B x 2l x m + 1
-
-        C_C_t = torch.transpose(C_C, 1, 2)  # B x m + 1 x 2l
-
-        # BiLSTM
-        bilstm_in = torch.cat((C_C_t, c), 2) # B x m + 1 x 3l
+        # second version based on description in project description pdf
+        qprime = torch.tanh(self.q_linear(q.view(-1, self.hidden_size))).view(q.size())
+        c_t = torch.transpose(c, 1, 2)
+        L = torch.bmm(qprime, c_t)
+        Alpha = F.softmax(L, dim=1)
+        a = torch.bmm(torch.transpose(Alpha, 1, 2), qprime)
+        Beta = F.softmax(L, dim=2)
+        b = torch.bmm(Beta, c)
+        s = torch.bmm(torch.transpose(Alpha, 1, 2), b)
+        bilstm_in = torch.cat((s, a), 2)
         bilstm_in = self.dropout(bilstm_in)
-        #?? should it be d_lens + 1 and get U[:-1]
-        U = self.encoder(bilstm_in, c_mask.sum(-1)) #B x m x 2l
+        U = self.encoder(bilstm_in, c_mask.sum(-1))
         return U
 
 class BiDAFOutput(nn.Module):

@@ -117,7 +117,9 @@ Make sure you do the following in the BiDAF folder.
 #### Test
 
 Usage:
-python test.py --split SPLIT --load_path PATH --name NAME
+
+`python test.py --split SPLIT --load_path PATH --name NAME`
+
 where
 - SPLIT is either "dev" or "test"
 - PATH is a path to a checkpoint (e.g., save/train/model-01/best.pth.tar)

@@ -91,6 +91,13 @@ Make sure you do the following in the BiDAF folder.
 - To train BiDAF model with Coattention Layer, run `python train.py -n coattention`
 - To train the combined model, run `python train.py -n combined`
 
+#### Test
+
+- To test BiDAF Baseline, run `python test.py -n baseline`
+- To test BiDAF model with Character-level Embeddings, run `python test.py -n character`
+- To test BiDAF model with Coattention Layer, run `python test.py -n coattention`
+- To test the combined model, run `python test.py -n combined`
+
 ### QANet Model
 
 ### BERT Model

@@ -39,6 +39,77 @@ class Embedding(nn.Module):
         return emb
 
 
+class EmbeddingWithCharacter(nn.Module):
+    """Embedding layer used by BiDAF, with the character-level component.
+
+    Word-level embeddings are further refined using a 2-layer Highway Encoder
+    (see `HighwayEncoder` class for details).
+
+    Args:
+        word_vectors (torch.Tensor): Pre-trained word vectors.
+        hidden_size (int): Size of hidden activations.
+        drop_prob (float): Probability of zero-ing out activations
+    """
+    def __init__(self, word_vectors, char_vectors, hidden_size, drop_prob):
+        super(Embedding, self).__init__()
+        self.drop_prob = drop_prob
+        
+        # word embedding
+        self.word_emb_size = word_vectors.size(1)
+        self.embed = nn.Embedding.from_pretrained(word_vectors)
+        
+        # character embedding
+        self.char_emb_size = char_vectors.size(1)
+        self.char_embed = nn.Embedding.from_pretrained(char_vectors, freeze=False)
+        
+        # CNN layer
+        n_filters = self.word_emb_size
+        kernel_size = 5
+        self.cnn = CNN(self.char_emb_size, n_filters, k=kernel_size)
+        
+        self.proj = nn.Linear(2*self.word_emb_size, hidden_size, bias=False)
+        self.hwy = HighwayEncoder(2, hidden_size)
+
+    def forward(self, x_word, x_char):
+        """
+        Return the embedding for the words in a batch of sentences.
+        Computed from the concatenation of a word-based lookup embedding and a character-based CNN embedding
+      
+        Args:
+            'x_word' (torch.Tensor): Tensor of integers of shape (batch_size, seq_len) where
+                each integer is an index into the word vocabulary
+            'x_char' (torch.Tensor): Tensor of integers of shape (batch_size, seq_len, max_word_len) where
+                each integer is an index into the character vocabulary
+        Return:
+            'emb' (torch.Tensor): Tensor of shape (batch_size, seq_len, hidden_size)containing the embeddings for each word of the sentences in the batch
+        """
+        
+        # char embedding
+        _, seq_len, max_word_len = x_char.size()
+            # reshape to a batch of characters word-sequence
+        x_char = x_char.view(-1, max_word_len)      # (b = batch_size*seq_len, max_word_len)
+            # character-level embedding
+        emb_char = self.char_embed(x_char)          # (b, max_word_len, char_emb_size)
+            # transpose to match the CNN shape requirements
+        emb_char = emb_char.transpose(1, 2)         # (b, n_channel_in = char_emb_size, max_word_len)
+            # pass through cnn
+        emb_char = self.cnn(emb_char)               # (b, n_channel_out = word_emb_size)
+            # reshape to a batch of sentences of words embeddings
+        emb_char = emb_char.view(-1, seq_len, self.word_emb_size)  # (batch_size, seq_len, word_emb_size)
+    
+        # word embedding
+        emb_word = self.embed(x_word)               # (batch_size, seq_len, word_emb_size)
+        
+        # concatenate the char and word embeddings
+        emb = torch.cat((emb_word, emb_char), 2)    # (batch_size, seq_len, 2*word_emb_size)
+        
+        emb = F.dropout(emb, self.drop_prob, self.training)
+        emb = self.proj(emb)                        # (batch_size, seq_len, hidden_size)
+        emb = self.hwy(emb)                         # (batch_size, seq_len, hidden_size)
+
+        return emb
+
+
 class HighwayEncoder(nn.Module):
     """Encode an input sequence using a highway network.
 

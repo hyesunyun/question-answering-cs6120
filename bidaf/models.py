@@ -93,7 +93,7 @@ class BiDAFCharacter(nn.Module):
         drop_prob (float): Dropout probability.
     """
     def __init__(self, word_vectors, char_vectors, hidden_size, drop_prob=0.):
-        super(BiDAF, self).__init__()
+        super(BiDAFCharacter, self).__init__()
         self.emb = layers.EmbeddingWithCharacter(word_vectors=word_vectors, char_vectors=char_vectors,
                                     hidden_size=hidden_size,
                                     drop_prob=drop_prob)
@@ -225,7 +225,7 @@ class BiDAFCombined(nn.Module):
         drop_prob (float): Dropout probability.
     """
     def __init__(self, word_vectors, char_vectors, hidden_size, drop_prob=0.):
-        super(BiDAF, self).__init__()
+        super(BiDAFCombined, self).__init__()
         self.emb = layers.EmbeddingWithCharacter(word_vectors=word_vectors, char_vectors=char_vectors,
                                     hidden_size=hidden_size,
                                     drop_prob=drop_prob)

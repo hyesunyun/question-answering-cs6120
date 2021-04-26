@@ -51,7 +51,7 @@ class EmbeddingWithCharacter(nn.Module):
         drop_prob (float): Probability of zero-ing out activations
     """
     def __init__(self, word_vectors, char_vectors, hidden_size, drop_prob):
-        super(Embedding, self).__init__()
+        super(EmbeddingWithCharacter, self).__init__()
         self.drop_prob = drop_prob
         
         # word embedding

@@ -28,6 +28,22 @@ We have the following splits:
 
 The dataset can be found in the `data` folder as json format.
 
+## Evaluation
+
+In the official dev and test set of SQuAD dataset, every answerable SQuAD question has three answers
+provided – each answer from a different crowd worker. The answers don’t always completely agree,
+which is partly why ‘human performance’ on the SQuAD leaderboard is not 100%. Performance
+is measured via two metrics: **Exact Match (EM) score** and **F1 score**.
+
+- Exact Match is a binary measure (i.e. true/false) of whether the system output matches
+the ground truth answer exactly. Stricter metric.
+- F1 is a less strict metric – it is the harmonic mean of precision and recall.
+- When evaluating on the dev or test sets, we take the maximum F1 and EM scores across
+the three human-provided answers for that question. This makes evaluation more forgiving
+
+Finally, the EM and F1 scores are averaged across the entire evaluation dataset to get the final
+reported scores.
+
 ## Models
 
 ### Baseline Model - Bidirectional Attention Flow (BiDAF)
@@ -108,19 +124,3 @@ Make sure you do the following in the BiDAF folder.
 ### QANet Model
 
 ### BERT Model
-
-## Evaluation
-
-In the official dev and test set of SQuAD dataset, every answerable SQuAD question has three answers
-provided – each answer from a different crowd worker. The answers don’t always completely agree,
-which is partly why ‘human performance’ on the SQuAD leaderboard is not 100%. Performance
-is measured via two metrics: **Exact Match (EM) score** and **F1 score**.
-
-- Exact Match is a binary measure (i.e. true/false) of whether the system output matches
-the ground truth answer exactly. Stricter metric.
-- F1 is a less strict metric – it is the harmonic mean of precision and recall.
-- When evaluating on the dev or test sets, we take the maximum F1 and EM scores across
-the three human-provided answers for that question. This makes evaluation more forgiving
-
-Finally, the EM and F1 scores are averaged across the entire evaluation dataset to get the final
-reported scores.

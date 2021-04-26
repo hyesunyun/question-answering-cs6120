@@ -21,6 +21,11 @@ chunk of text taken directly from the paragraph. This means that SQuAD systems d
 generate the answer text – they just have to select the span of text in the paragraph that answers
 the question.
 
+We have the following splits:
+- train (105,276 examples/questions): All taken from the official SQuAD 2.0 training set.
+- dev (5,951 examples/questions): Roughly half of the official dev set, randomly selected.
+- test (25,043 examples/questions): The remaining examples from the official train set.
+
 ## Models
 
 ### Baseline Model - Bidirectional Attention Flow (BiDAF)

@@ -59,6 +59,9 @@ This is the combined model.
 
 ### How to use the BiDAF Model code
 
+Make sure you do the following in the BiDAF folder.
+`cd BiDAF`
+
 #### Setup
 
 1. Make sure you have [Miniconda](https://conda.io/docs/user-guide/install/index.html#regular-installation) installed

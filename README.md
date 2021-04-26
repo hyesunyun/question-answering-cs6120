@@ -116,10 +116,10 @@ Make sure you do the following in the BiDAF folder.
 
 #### Test
 
-- To test BiDAF Baseline, run `python test.py -n baseline`
-- To test BiDAF model with Character-level Embeddings, run `python test.py -n character`
-- To test BiDAF model with Coattention Layer, run `python test.py -n coattention`
-- To test the combined model, run `python test.py -n combined`
+- To test BiDAF Baseline, run `python test.py -n baseline --load_path path-to-model-checkpoint`
+- To test BiDAF model with Character-level Embeddings, run `python test.py -n character --load_path path-to-model-checkpoint`
+- To test BiDAF model with Coattention Layer, run `python test.py -n coattention --load_path path-to-model-checkpoint`
+- To test the combined model, run `python test.py -n combined --load_path path-to-model-checkpoint`
 
 ### QANet Model
 

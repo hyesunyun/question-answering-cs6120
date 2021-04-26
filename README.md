@@ -116,10 +116,19 @@ Make sure you do the following in the BiDAF folder.
 
 #### Test
 
-- To test BiDAF Baseline, run `python test.py -n baseline --load_path path-to-model-checkpoint`
-- To test BiDAF model with Character-level Embeddings, run `python test.py -n character --load_path path-to-model-checkpoint`
-- To test BiDAF model with Coattention Layer, run `python test.py -n coattention --load_path path-to-model-checkpoint`
-- To test the combined model, run `python test.py -n combined --load_path path-to-model-checkpoint`
+Usage:
+python test.py --split SPLIT --load_path PATH --name NAME
+where
+- SPLIT is either "dev" or "test"
+- PATH is a path to a checkpoint (e.g., save/train/model-01/best.pth.tar)
+- NAME is a name to identify the test run.
+
+**NOTE**: `-n` is an alias for `--name` so `-n` can be used as well.
+
+- To test BiDAF Baseline, run `python test.py --split test --load_path save/train/baseline-01/best.pth.tar -n baseline`
+- To test BiDAF model with Character-level Embeddings, run `python test.py --split test --load_path save/train/character-01/best.pth.tar -n character`
+- To test BiDAF model with Coattention Layer, run `python test.py --split test --load_path save/train/coattention-01/best.pth.tar -n coattention`
+- To test the combined model, run `python test.py --split test --load_path save/train/combined-01/best.pth.tar -n combined`
 
 ### QANet Model
 

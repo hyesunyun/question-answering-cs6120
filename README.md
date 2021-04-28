@@ -134,6 +134,8 @@ where
 
 ### QANet Model
 
+The QANet structure implementation on pytorch is mainly based on https://github.com/Aadesh-Magare/QANet-for-SQuAD-2.0
+
 Before training the model, please add the glove file (see setup) to `/data/original/glove`
 
 Run `python QANet_main.py --batch_size 32 --epochs 30 --with_cuda --use_ema` to train model with cuda.

@@ -23,6 +23,11 @@ from tqdm import tqdm
 from ujson import load as json_load
 from util import collate_fn, SQuAD
 
+import os 
+os.environ["CUDA_VISIBLE_DEVICES"]="0"
+
+print('training on :', torch.cuda.current_device())
+
 
 def main(args):
     # Set up logging and devices

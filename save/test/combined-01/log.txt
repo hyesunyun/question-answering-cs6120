@@ -1,0 +1,28 @@
+[04.28.21 00:41:54] Args: {
+    "batch_size": 64,
+    "char_emb_file": "./data/char_emb.json",
+    "dev_eval_file": "./data/dev_eval.json",
+    "dev_record_file": "./data/dev.npz",
+    "hidden_size": 100,
+    "load_path": "save/train/combined-01/best.pth.tar",
+    "max_ans_len": 15,
+    "name": "combined",
+    "num_visuals": 10,
+    "num_workers": 4,
+    "save_dir": "./save/test/combined-02",
+    "split": "test",
+    "sub_file": "submission.csv",
+    "test_eval_file": "./data/test_eval.json",
+    "test_record_file": "./data/test.npz",
+    "train_eval_file": "./data/train_eval.json",
+    "train_record_file": "./data/train.npz",
+    "use_squad_v2": true,
+    "word_emb_file": "./data/word_emb.json"
+}
+[04.28.21 00:41:54] Loading embeddings...
+[04.28.21 00:42:00] Building model...
+[04.28.21 00:42:04] Loading checkpoint from save/train/combined-01/best.pth.tar...
+[04.28.21 00:42:04] Building dataset...
+[04.28.21 00:42:08] Evaluating on test split...
+[04.28.21 00:42:45] Test NLL: 03.91, F1: 48.38, EM: 42.89, AvNA: 60.91
+[04.28.21 00:42:49] Writing submission file to ./save/test/combined-02/test_submission.csv...

@@ -1,0 +1,28 @@
+[04.27.21 19:55:27] Args: {
+    "batch_size": 64,
+    "char_emb_file": "./data/char_emb.json",
+    "dev_eval_file": "./data/dev_eval.json",
+    "dev_record_file": "./data/dev.npz",
+    "hidden_size": 100,
+    "load_path": "save/train/coattention-01/best.pth.tar",
+    "max_ans_len": 15,
+    "name": "coattention",
+    "num_visuals": 10,
+    "num_workers": 4,
+    "save_dir": "./save/test/coattention-02",
+    "split": "test",
+    "sub_file": "submission.csv",
+    "test_eval_file": "./data/test_eval.json",
+    "test_record_file": "./data/test.npz",
+    "train_eval_file": "./data/train_eval.json",
+    "train_record_file": "./data/train.npz",
+    "use_squad_v2": true,
+    "word_emb_file": "./data/word_emb.json"
+}
+[04.27.21 19:55:27] Loading embeddings...
+[04.27.21 19:55:32] Building model...
+[04.27.21 19:55:37] Loading checkpoint from save/train/coattention-01/best.pth.tar...
+[04.27.21 19:55:37] Building dataset...
+[04.27.21 19:55:41] Evaluating on test split...
+[04.27.21 19:56:13] Test NLL: 04.00, F1: 48.49, EM: 42.36, AvNA: 62.48
+[04.27.21 19:56:17] Writing submission file to ./save/test/coattention-02/test_submission.csv...

@@ -1,0 +1,28 @@
+[04.26.21 10:10:58] Args: {
+    "batch_size": 64,
+    "char_emb_file": "./data/char_emb.json",
+    "dev_eval_file": "./data/dev_eval.json",
+    "dev_record_file": "./data/dev.npz",
+    "hidden_size": 100,
+    "load_path": "save/train/baseline-04/best.pth.tar",
+    "max_ans_len": 15,
+    "name": "baseline",
+    "num_visuals": 10,
+    "num_workers": 4,
+    "save_dir": "./save/test/baseline-07",
+    "split": "test",
+    "sub_file": "submission.csv",
+    "test_eval_file": "./data/test_eval.json",
+    "test_record_file": "./data/test.npz",
+    "train_eval_file": "./data/train_eval.json",
+    "train_record_file": "./data/train.npz",
+    "use_squad_v2": true,
+    "word_emb_file": "./data/word_emb.json"
+}
+[04.26.21 10:10:58] Loading embeddings...
+[04.26.21 10:11:02] Building model...
+[04.26.21 10:11:06] Loading checkpoint from save/train/baseline-04/best.pth.tar...
+[04.26.21 10:11:06] Building dataset...
+[04.26.21 10:11:09] Evaluating on test split...
+[04.26.21 10:11:31] Test NLL: 03.24, F1: 57.53, EM: 49.89, AvNA: 71.11
+[04.26.21 10:11:34] Writing submission file to ./save/test/baseline-07/test_submission.csv...

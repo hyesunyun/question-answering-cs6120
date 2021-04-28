@@ -1,0 +1,28 @@
+[04.26.21 18:12:34] Args: {
+    "batch_size": 64,
+    "char_emb_file": "./data/char_emb.json",
+    "dev_eval_file": "./data/dev_eval.json",
+    "dev_record_file": "./data/dev.npz",
+    "hidden_size": 100,
+    "load_path": "save/train/character-10/best.pth.tar",
+    "max_ans_len": 15,
+    "name": "character",
+    "num_visuals": 10,
+    "num_workers": 4,
+    "save_dir": "./save/test/character-02",
+    "split": "test",
+    "sub_file": "submission.csv",
+    "test_eval_file": "./data/test_eval.json",
+    "test_record_file": "./data/test.npz",
+    "train_eval_file": "./data/train_eval.json",
+    "train_record_file": "./data/train.npz",
+    "use_squad_v2": true,
+    "word_emb_file": "./data/word_emb.json"
+}
+[04.26.21 18:12:34] Loading embeddings...
+[04.26.21 18:12:39] Building model...
+[04.26.21 18:12:42] Loading checkpoint from save/train/character-10/best.pth.tar...
+[04.26.21 18:12:42] Building dataset...
+[04.26.21 18:12:46] Evaluating on test split...
+[04.26.21 18:13:10] Test NLL: 03.25, F1: 59.49, EM: 51.31, AvNA: 72.84
+[04.26.21 18:13:13] Writing submission file to ./save/test/character-02/test_submission.csv...

@@ -2,7 +2,6 @@
 .idea/
 bidaf/__pycache__
 bidaf/.texpadtmp/
-bidaf/data/*
 !bidaf/data/dev-v2.0.json
 !bidaf/data/test-v2.0.json
 !bidaf/data/train-v2.0.json

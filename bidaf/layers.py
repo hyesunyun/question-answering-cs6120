@@ -289,6 +289,7 @@ class BiDAFAttention(nn.Module):
 
         return s
 
+# Version of Coattention that performed
 # class Coattention(nn.Module):
 #     """Coattention Layer.
 

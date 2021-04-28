@@ -138,6 +138,10 @@ The QANet structure implementation on pytorch is mainly based on https://github.
 
 Before training the model, please add the glove file (see setup) to `/data/original/glove`
 
-Run `python QANet_main.py --batch_size 32 --epochs 30 --with_cuda --use_ema` to train model with cuda.
+Go to `QANet-for-SQuAD-2.0-master` and run `python QANet_main.py --batch_size 32 --epochs 30 --with_cuda --use_ema` to train model with cuda.
 
 ### BERT Model
+
+The BERT implementation on pytorch is mainly based on https://github.com/huggingface/transformers
+
+Please see `BERT-SQUAD2.0.ipynb` for details. 

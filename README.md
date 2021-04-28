@@ -26,7 +26,7 @@ We have the following splits:
 - dev (5,951 examples/questions): Roughly half of the official dev set, randomly selected.
 - test (25,043 examples/questions): The remaining examples from the official train set.
 
-The dataset can be found in the `data` folder as json format.
+The dataset can be found in the `bidaf/data` folder as json format.
 
 ## Evaluation
 
